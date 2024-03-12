@@ -1,0 +1,126 @@
+Clear
+Store result
+
+inputX, Input
+			Store X
+			Skipcond 400
+			Jump inputY
+			Jump halt
+inputY, Input
+		Store Y
+        Skipcond 400 //y==0
+        Jump checkX //Jezeli nie jest to skocz tu
+        Jump halt // jezeli jest to skoncz
+        
+        
+checkX,		Load X
+			Skipcond 800
+			Jump setxneg
+			Skipcond 400
+            		Jump checkY
+            Jump halt   
+
+
+checkY,		Load Y
+			Skipcond 800
+			Jump setyneg
+			Skipcond 400
+            		Jump division
+            Jump halt
+            
+setxneg,	Subt X
+			Subt X
+			Store X
+            
+			Clear
+			Add ONE
+			Store xneg //ustawienie flagi dla x
+			Clear
+            
+            Jump checkY
+            
+setyneg,	Subt Y
+			Subt Y
+			Store Y
+            
+			Clear
+            		Add ONE
+			Store yneg //ustawienie flagi dla y
+			Clear
+            
+            Jump division            
+            
+setresult,	Load result
+            Add ONE
+            Store result
+            
+division,	Load X
+			Subt Y
+            Store X			
+			
+            Skipcond 000
+            Jump setresult            
+    
+setrem, 	Skipcond 400
+			Add Y
+			Store remainder    //reszta
+            
+            
+Load xneg
+Subt yneg
+Skipcond 400
+Jump ynegcheck
+Jump xnegcheck
+
+
+xnegcheck,	Load xneg
+			Skipcond 400
+            Jump remcheck
+            Jump halt
+
+ynegcheck,	Load yneg
+			Skipcond 400
+            Jump negate
+            Jump remcheck
+
+remcheck,	Load remainder
+			Skipcond 400
+            Jump correction
+            
+            Load xneg
+            Subt yneg
+            Skipcond 400
+            Jump negate
+            Jump halt
+            
+            // ostateczna korekcja
+correction, Load Y
+			Subt remainder
+            Store remainder
+            
+            Load result 
+            Add ONE
+            Store result
+            
+            Load yneg
+            Skipcond 400
+            Jump halt
+
+negate, 	Load result
+			Subt result
+			Subt result
+			Store result
+
+halt,    	Load result
+         	Output	
+         	Load remainder
+         	Output
+         	Halt
+
+X, DEC 0
+Y, DEC 0
+xneg, DEC 0
+yneg, DEC 0
+result, DEC 0
+remainder, DEC 0
+ONE, DEC 1            
